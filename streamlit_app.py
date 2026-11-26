@@ -451,14 +451,20 @@ with st.sidebar:
         "sol_title_bg": st.session_state.get('sol_t_bg', False),
     }
 with st.expander(tr("Disclaimer, Accuracy & Support")):
-    st.info(tr("""
-    **Why are some years wrong?**
-    Metadata providers often list the date a song was added to a digital album (like a 'Greatest Hits' or 'Remaster') rather than the original single release date.
-    You can now **manually correct years** in the table below after scraping!
-    
-    **📱 Mobile User Note:**
-    If the download button doesn't respond on your phone, please try a desktop browser. Mobile browsers sometimes struggle with large in-memory PDF streams.
-    """))
+    if st.session_state.interface_language == "Français":
+        st.info("""**Pourquoi certaines années sont-elles incorrectes ?**
+Les fournisseurs de métadonnées indiquent parfois la date d'ajout d'un titre à un album numérique (comme une compilation « Greatest Hits » ou une version remasterisée), plutôt que sa date de sortie originale.
+Vous pouvez **corriger manuellement les années** dans le tableau ci-dessous après l'importation.
+
+**📱 Sur mobile :**
+Si le bouton de téléchargement ne répond pas, essayez depuis un ordinateur. Les navigateurs mobiles peuvent avoir des difficultés avec les fichiers PDF volumineux générés en mémoire.""")
+    else:
+        st.info("""**Why are some years wrong?**
+Metadata providers may show the date a song was added to a digital album (such as a 'Greatest Hits' or 'Remaster') instead of its original single release date.
+You can **manually correct years** in the table below after importing.
+
+**📱 Mobile note:**
+If the download button does not respond, try a desktop browser. Mobile browsers may struggle with large PDF files.""")
 
 # --- MAIN PAGE ---
 col1, col2 = st.columns([2, 1])
