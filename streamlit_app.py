@@ -250,7 +250,7 @@ def dynamic_color_list(key_prefix, title, default_colors, help_text=""):
         return [item["color"] for item in items]
 
 # --- UI INTERFACE ---
-st.set_page_config(page_title="Hitster Generator", page_icon="🎵", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Hitster Card Generator", page_icon="🎵", layout="wide", initial_sidebar_state="expanded")
 
 with st.sidebar:
     st.selectbox("Langue / Language", ["Français", "English"], key="interface_language")
@@ -310,9 +310,7 @@ with st.sidebar:
         st.divider()
 
         with st.expander(tr("🔑 Spotify API Credentials (optional)")):
-            st.caption(tr("Only needed when pasting a playlist URL. "
-                       "Without credentials, playlist URLs are limited to ~100 tracks. "
-                       "Pasting individual track links works without limits.")
+            st.caption(tr("Only needed when pasting a playlist URL. Without credentials, playlist URLs are limited to ~100 tracks. Pasting individual track links works without limits."))
             spotify_client_id = st.text_input(tr("Client ID"), type="password")
             spotify_client_secret = st.text_input(tr("Client Secret"), type="password")
         
