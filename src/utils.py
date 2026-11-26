@@ -1066,17 +1066,21 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     
-    # Configurable square-card grid, centered on the A4 page.
+    # Configurable square-card grid with adjustable spacing, centered on A4.
     card_size = float(settings.get("card_size_cm", 5.0)) * cm
+    card_spacing = max(0.0, float(settings.get("card_spacing_cm", 0.0))) * cm
+    pitch = card_size + card_spacing
     cols = max(1, int(settings.get("cards_per_row", 4)))
     rows = max(1, int(settings.get("cards_per_col", 5)))
 
-    # Clamp custom settings so every card remains inside the printable page.
-    cols = min(cols, max(1, int(width // card_size)))
-    rows = min(rows, max(1, int(height // card_size)))
+    # Clamp custom settings so every card and gap remain inside the page.
+    cols = min(cols, max(1, int((width + card_spacing) // pitch)))
+    rows = min(rows, max(1, int((height + card_spacing) // pitch)))
     cards_per_page = cols * rows
-    margin_x = (width - (cols * card_size)) / 2
-    margin_y = (height - (rows * card_size)) / 2
+    grid_width = cols * card_size + (cols - 1) * card_spacing
+    grid_height = rows * card_size + (rows - 1) * card_spacing
+    margin_x = (width - grid_width) / 2
+    margin_y = (height - grid_height) / 2
 
     total_cards = len(songs)
     years = [song['year'] for song in songs]
@@ -1099,8 +1103,8 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
         for idx, song in enumerate(batch_songs):
             col = idx % cols
             row = (idx // cols) 
-            x = margin_x + col * card_size
-            y = height - margin_y - (row + 1) * card_size
+            x = margin_x + col * pitch
+            y = height - margin_y - card_size - row * pitch
             
             base_qr = create_qr_code(song['link'])
             # Per-card unique ring pattern based on link hash
@@ -1126,8 +1130,8 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
             mirrored_col = (cols - 1) - orig_col
             row = (idx // cols)
             
-            x = margin_x + mirrored_col * card_size
-            y = height - margin_y - (row + 1) * card_size
+            x = margin_x + mirrored_col * pitch
+            y = height - margin_y - card_size - row * pitch
             
             sol_pil = create_solution_side_in_memory(
                 song['name'], song['artist'], song['year'], years, settings_override=settings
