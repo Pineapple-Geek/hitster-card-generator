@@ -112,6 +112,7 @@ TRANSLATIONS = {
     "Song": "Titre",
     "Year": "Année",
     "Source": "Origine",
+    "Manual": "Manuel",
     "Link": "Lien",
     "Edit this to fix incorrect years!": "Modifiez cette valeur pour corriger une année incorrecte !",
     "Where the year came from": "Origine de l'année indiquée",
@@ -582,7 +583,7 @@ if songs:
             "Artist": s['artist'],
             "Song": s['name'],
             "Year": s['year'] if s['year'] is not None else None,
-            "Source": s.get('year_source', ''),
+            "Source": tr(s.get('year_source', '')),
             "Link": s['link'],
         }
         for s in songs
