@@ -299,7 +299,7 @@ with st.sidebar:
         border_mode = st.toggle(tr("Draw Cutting Borders"), value=st.session_state.get('border_mode', False),
                                help=tr("Draw a line around each card for easier cutting."))
         
-        font_choice = st.selectbox(tr("Font Selection"), ["Montserrat", "Oswald", "Roboto", "Dancing Script", "Pacifico", "Custom..."])
+        font_choice = st.selectbox(tr("Font Selection"), ["Montserrat", "Oswald", "Roboto", "Dancing Script", "Pacifico", "Custom..."], format_func=tr)
         if font_choice == "Custom...":
             google_font = st.text_input(tr("Custom Google Font Name"), value=st.session_state.get('google_font', "Montserrat"),
                                         help=tr("Type any font name from Google Fonts."))
@@ -558,8 +558,7 @@ songs = st.session_state.songs
 if songs:
     st.divider()
     st.subheader(tr("📝 Review & Edit Songs"))
-    st.caption(tr("Fix any incorrect years before generating cards. "
-               "Songs with unknown years show as empty — fill them in!")
+    st.caption(tr("Fix any incorrect years before generating cards. Songs with unknown years show as empty — fill them in!"))
 
     # Build an editable dataframe
     import pandas as pd
@@ -601,7 +600,7 @@ if songs:
     
     # Pick a sample song for preview
     preview_idx = st.selectbox(
-        "Preview card for:", 
+        tr("Preview card for:"), 
         range(len(edited_df)),
         format_func=lambda i: f"{edited_df.iloc[i]['Artist']} — {edited_df.iloc[i]['Song']}",
     )
