@@ -990,7 +990,7 @@ def create_solution_side_in_memory(song_name, artist, year, all_years, settings_
     return img
 
 
-def fetch_no_api_data_from_list(urls, progress_bar=None):
+def fetch_no_api_data_from_list(urls, progress_bar=None, language="English"):
     """
     Scrapes metadata from public Spotify pages based on a provided list of URLs.
     """
@@ -1037,7 +1037,7 @@ def fetch_no_api_data_from_list(urls, progress_bar=None):
             # Update Progress — fixed off-by-one
             if progress_bar:
                 percent = idx / total
-                progress_bar.progress(percent, text=f"Scraped {idx}/{total}: {title[:30]}...")
+                progress_bar.progress(percent, text=(f"Récupération {idx}/{total} : {title[:30]}..." if language == "Français" else f"Scraped {idx}/{total}: {title[:30]}..."))
 
         except Exception as e:
             print(f"  Error scraping {url}: {e}")
@@ -1148,7 +1148,7 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
         if progress_bar:
             processed = min(i + cards_per_page, total_cards)
             percent = processed / total_cards
-            progress_bar.progress(percent, text=f"Generated {processed}/{total_cards} cards...")
+            progress_bar.progress(percent, text=(f"Cartes créées : {processed}/{total_cards}..." if settings.get("interface_language") == "Français" else f"Generated {processed}/{total_cards} cards..."))
         c.showPage()
 
         # Reclaim the batch's rasters before building the next page.
