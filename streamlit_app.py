@@ -23,19 +23,19 @@ TRANSLATIONS = {
     "QR Side (Front)": "Face QR (recto)",
     "Solution Side (Back)": "Face réponses (verso)",
     "📄 Print & Layout": "📄 Impression et mise en page",
-    tr("Card size (cm)"): "Taille des cartes (cm)",
+    "Card size (cm)": "Taille des cartes (cm)",
     "Square card size. The available rows and columns adapt to A4.": "La taille des cartes est carrée. Le nombre de lignes et de colonnes s'adapte au format A4.",
-    tr("Space between cards (cm)"): "Espacement entre les cartes (cm)",
+    "Space between cards (cm)": "Espacement entre les cartes (cm)",
     "Adds the same gap horizontally and vertically between cards.": "Ajoute le même espace horizontalement et verticalement entre les cartes.",
     "The spacing is visible in the generated PDF, not in the single-card preview.": "L'espacement est visible dans le PDF généré, pas dans l'aperçu d'une carte seule.",
-    tr("Columns per page"): "Colonnes par page",
-    tr("Rows per page"): "Lignes par page",
+    "Columns per page": "Colonnes par page",
+    "Rows per page": "Lignes par page",
     "Ink Saving Mode": "Mode économie d'encre",
     "Use white background and black text to save ink.": "Utilise un fond blanc et du texte noir pour économiser l'encre.",
     "Draw Cutting Borders": "Afficher les traits de découpe",
     "Draw a line around each card for easier cutting.": "Trace un contour autour de chaque carte pour faciliter la découpe.",
     "Font Selection": "Choix de la police",
-    tr("Custom..."): "Personnalisée…",
+    "Custom...": "Personnalisée…",
     "Custom Google Font Name": "Nom de la police Google personnalisée",
     "Type any font name from Google Fonts.": "Saisissez le nom d'une police disponible sur Google Fonts.",
     "[🔍 Browse Google Fonts here](https://fonts.google.com/)": "[🔍 Parcourir les polices Google Fonts](https://fonts.google.com/)",
@@ -69,7 +69,7 @@ TRANSLATIONS = {
     "Title Color": "Couleur du titre",
     "Draw Background Box": "Ajouter un fond au titre",
     "🎨 Color Gradient": "🎨 Dégradé de couleurs",
-    tr("Year Color Gradient"): "Dégradé de couleurs des années",
+    "Year Color Gradient": "Dégradé de couleurs des années",
     "Colors map to the oldest to newest years.": "Les couleurs correspondent aux années, de la plus ancienne à la plus récente.",
     "Upload Image (Solution Side)": "Importer une image (face réponses)",
     "Ink Saving Border Thickness": "Épaisseur de la bordure d'économie d'encre",
@@ -116,7 +116,7 @@ TRANSLATIONS = {
     "Edit this to fix incorrect years!": "Modifiez cette valeur pour corriger une année incorrecte !",
     "Where the year came from": "Origine de l'année indiquée",
     "👀 Card Preview": "👀 Aperçu des cartes",
-    tr("Preview card for:"): "Afficher la carte de :",
+    "Preview card for:": "Afficher la carte de :",
     "QR Side": "Face QR",
     "Solution Side": "Face réponses",
     "🎴 Create My PDF": "🎴 Créer mon PDF",
@@ -124,6 +124,11 @@ TRANSLATIONS = {
     "Starting PDF generation...": "Démarrage de la création du PDF…",
     "✅ All Cards Generated!": "✅ Toutes les cartes ont été créées !",
     "💾 Download Printable PDF": "💾 Télécharger le PDF prêt à imprimer",
+    "Found {count} tracks. Scraping metadata...": "{count} titres trouvés. Récupération des informations…",
+    "✅ Fetched {count} songs!": "✅ {count} titre(s) récupéré(s) !",
+    "🎵 {count} Spotify **track link(s)** detected.": "🎵 {count} lien(s) de **titre Spotify** détecté(s).",
+    "⚠️ {count} song(s) have no year. Please fill them in above, or they will show as '????' on the cards.": "⚠️ {count} titre(s) n'ont pas d'année. Renseignez-les ci-dessus, sinon « ???? » apparaîtra sur les cartes.",
+    "{count} cards per page ({cols} columns × {rows} rows)": "{count} cartes par page ({cols} colonnes × {rows} lignes)",
     "neon_rings": "Anneaux néon",
     "solid": "Couleur unie",
     "image": "Image",
@@ -143,7 +148,11 @@ TRANSLATIONS = {
     "in_border_top_left": "Dans la bordure, en haut à gauche"
 }
 def tr(value):
-    return TRANSLATIONS.get(value, value) if st.session_state.get('interface_language', 'Français') == 'Français' else value
+    if st.session_state.get("interface_language", "Français") != "Français":
+        return value
+    if value.startswith("Color ") and value[6:].isdigit():
+        return "Couleur " + value[6:]
+    return TRANSLATIONS.get(value, value)
 
 # --- STATE INITIALIZATION ---
 if "songs" not in st.session_state:
@@ -367,7 +376,7 @@ with st.sidebar:
             help_text=tr("Colors map to the oldest to newest years.")
         )
 
-        st.subheader("🖼️ Background")
+        st.subheader(tr("🖼️ Background"))
         sol_bg_type = st.selectbox(tr("Background Type"), ["gradient", "image"], key="sol_bg_type", format_func=tr)
         if sol_bg_type == "image":
             sol_bg_upload = st.file_uploader(tr("Upload Image (Solution Side)"), type=["png", "jpg", "jpeg"], key="sol_bg_up")
@@ -376,24 +385,24 @@ with st.sidebar:
             else:
                 st.session_state.sol_bg_img = None
                 
-            st.session_state.sol_bg_scale = st.slider("Image Scale", 0.1, 3.0, 1.0, 0.1, key="sol_scale")
-            st.session_state.sol_bg_x = st.slider("X Offset", -1.0, 1.0, 0.0, 0.05, key="sol_x")
-            st.session_state.sol_bg_y = st.slider("Y Offset", -1.0, 1.0, 0.0, 0.05, key="sol_y")
+            st.session_state.sol_bg_scale = st.slider(tr("Image Scale"), 0.1, 3.0, 1.0, 0.1, key="sol_scale")
+            st.session_state.sol_bg_x = st.slider(tr("X Offset"), -1.0, 1.0, 0.0, 0.05, key="sol_x")
+            st.session_state.sol_bg_y = st.slider(tr("Y Offset"), -1.0, 1.0, 0.0, 0.05, key="sol_y")
         
         st.session_state.sol_border_width = st.slider(tr("Ink Saving Border Thickness"), 10, 500, 100, key="sol_bw")
 
-        st.subheader("🔤 Title")
-        st.session_state.sol_title_en = st.toggle("Enable Title", key="sol_t_en")
+        st.subheader(tr("🔤 Title"))
+        st.session_state.sol_title_en = st.toggle(tr("Enable Title"), key="sol_t_en")
         if st.session_state.sol_title_en:
-            st.session_state.sol_title = st.text_input("Title Text", value="HITSTER", key="sol_t_t")
+            st.session_state.sol_title = st.text_input(tr("Title Text"), value="HITSTER", key="sol_t_t")
             pos_options_sol = [
                 "in_border_bottom_right", "in_border_bottom_left", "in_border_top_right", "in_border_top_left",
                 "top", "bottom", "top_left", "top_right", "bottom_left", "bottom_right"
             ]
             st.session_state.sol_title_pos = st.selectbox(tr("Position"), pos_options_sol, key="sol_t_p", format_func=tr)
-            st.session_state.sol_title_size = st.slider("Font Size", 20, 200, 80, key="sol_t_s")
-            st.session_state.sol_title_color = st.color_picker("Title Color", value="#000000", key="sol_t_c")
-            st.session_state.sol_title_bg = st.toggle("Draw Background Box", key="sol_t_bg")
+            st.session_state.sol_title_size = st.slider(tr("Font Size"), 20, 200, 80, key="sol_t_s")
+            st.session_state.sol_title_color = st.color_picker(tr("Title Color"), value="#000000", key="sol_t_c")
+            st.session_state.sol_title_bg = st.toggle(tr("Draw Background Box"), key="sol_t_bg")
 
     # Build this session's settings. Kept in st.session_state (per user) and
     # passed explicitly into utils functions, never written to a shared global.
