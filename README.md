@@ -73,7 +73,7 @@ You can now fully customize the look and feel of your cards in the **sidebar** o
 
 ### Option A — Web App (easiest)
 
-👉 **<https://hitster-card-generator.streamlit.app/>**
+👉 **<https://hitster-custom-card-generator.streamlit.app/>**
 
 1. **Copy links** — In Spotify Desktop, open your playlist, select songs (`Ctrl+A`), copy (`Ctrl+C`).
 2. **Paste** — Drop them into the text area (individual track links *or* a single playlist URL).
