@@ -127,8 +127,13 @@ with st.sidebar:
             value=5.0, step=0.5, key="print_card_size_cm",
             help="Square card size. The available rows and columns adapt to A4."
         )
-        max_cols = max(1, int(21.0 // card_size_cm))
-        max_rows = max(1, int(29.7 // card_size_cm))
+        card_spacing_cm = st.slider(
+            "Space between cards (cm)", min_value=0.0, max_value=1.0,
+            value=0.0, step=0.1, key="print_card_spacing_cm",
+            help="Adds the same gap horizontally and vertically between cards."
+        )
+        max_cols = max(1, int((21.0 + card_spacing_cm) // (card_size_cm + card_spacing_cm)))
+        max_rows = max(1, int((29.7 + card_spacing_cm) // (card_size_cm + card_spacing_cm)))
         st.session_state["print_cols"] = min(
             max(1, int(st.session_state.get("print_cols", 4))), max_cols
         )
@@ -279,6 +284,7 @@ with st.sidebar:
     # passed explicitly into utils functions, never written to a shared global.
     st.session_state.design_settings = {
         "card_size_cm": card_size_cm,
+        "card_spacing_cm": card_spacing_cm,
         "cards_per_row": cards_per_row,
         "cards_per_col": cards_per_col,
         "ink_saving_mode": ink_mode,
