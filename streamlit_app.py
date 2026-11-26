@@ -120,6 +120,33 @@ with st.sidebar:
     
     with tabs[0]:
         st.subheader("📄 Print & Layout")
+
+        # Configurable square-card layout for A4 printing.
+        card_size_cm = st.slider(
+            "Card size (cm)", min_value=3.0, max_value=8.0,
+            value=5.0, step=0.5, key="print_card_size_cm",
+            help="Square card size. The available rows and columns adapt to A4."
+        )
+        max_cols = max(1, int(21.0 // card_size_cm))
+        max_rows = max(1, int(29.7 // card_size_cm))
+        st.session_state["print_cols"] = min(
+            max(1, int(st.session_state.get("print_cols", 4))), max_cols
+        )
+        st.session_state["print_rows"] = min(
+            max(1, int(st.session_state.get("print_rows", 5))), max_rows
+        )
+        cards_per_row = st.slider(
+            "Columns per page", min_value=1, max_value=max_cols,
+            key="print_cols"
+        )
+        cards_per_col = st.slider(
+            "Rows per page", min_value=1, max_value=max_rows,
+            key="print_rows"
+        )
+        st.caption(
+            f"{cards_per_row * cards_per_col} cards per page "
+            f"({cards_per_row} columns × {cards_per_col} rows)"
+        )
         ink_mode = st.toggle("Ink Saving Mode", value=st.session_state.get('ink_mode', False), 
                             help="Use white background and black text to save ink.")
         border_mode = st.toggle("Draw Cutting Borders", value=st.session_state.get('border_mode', False),
@@ -251,6 +278,9 @@ with st.sidebar:
     # Build this session's settings. Kept in st.session_state (per user) and
     # passed explicitly into utils functions, never written to a shared global.
     st.session_state.design_settings = {
+        "card_size_cm": card_size_cm,
+        "cards_per_row": cards_per_row,
+        "cards_per_col": cards_per_col,
         "ink_saving_mode": ink_mode,
         "card_draw_border": border_mode,
         "card_background_color": "#FFFFFF" if ink_mode else qr_bg_color,

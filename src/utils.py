@@ -1066,9 +1066,15 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     
-    # Grid Settings (5x5 cm cards)
-    card_size = 5 * cm
-    cols, rows = 4, 5  # 20 cards per page
+    # Configurable square-card grid, centered on the A4 page.
+    card_size = float(settings.get("card_size_cm", 5.0)) * cm
+    cols = max(1, int(settings.get("cards_per_row", 4)))
+    rows = max(1, int(settings.get("cards_per_col", 5)))
+
+    # Clamp custom settings so every card remains inside the printable page.
+    cols = min(cols, max(1, int(width // card_size)))
+    rows = min(rows, max(1, int(height // card_size)))
+    cards_per_page = cols * rows
     margin_x = (width - (cols * card_size)) / 2
     margin_y = (height - (rows * card_size)) / 2
 
@@ -1077,8 +1083,8 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
 
     card_label = settings.get('card_label', None)
 
-    for i in range(0, total_cards, 20):
-        batch_songs = list(songs[i:i+20])
+    for i in range(0, total_cards, cards_per_page):
+        batch_songs = list(songs[i:i+cards_per_page])
 
         # --- PAGE 1: FRONT (QR CODES) ---
         bg_color = settings.get('card_background_color', (0, 0, 0))
@@ -1136,7 +1142,7 @@ def create_pdf_in_memory(songs, progress_bar=None, settings_override=None):
             del sol_pil, sol_byte_arr
 
         if progress_bar:
-            processed = min(i + 20, total_cards)
+            processed = min(i + cards_per_page, total_cards)
             percent = processed / total_cards
             progress_bar.progress(percent, text=f"Generated {processed}/{total_cards} cards...")
         c.showPage()
