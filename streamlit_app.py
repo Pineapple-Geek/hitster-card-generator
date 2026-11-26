@@ -130,8 +130,10 @@ with st.sidebar:
         card_spacing_cm = st.slider(
             "Space between cards (cm)", min_value=0.0, max_value=1.0,
             value=0.0, step=0.1, key="print_card_spacing_cm",
-            help="Adds the same gap horizontally and vertically between cards."
+            help="Adds the same gap horizontally and vertically between cards.",
+            on_change=reset_generation
         )
+        st.caption("The spacing is visible in the generated PDF, not in the single-card preview.")
         max_cols = max(1, int((21.0 + card_spacing_cm) // (card_size_cm + card_spacing_cm)))
         max_rows = max(1, int((29.7 + card_spacing_cm) // (card_size_cm + card_spacing_cm)))
         st.session_state["print_cols"] = min(
