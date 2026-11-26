@@ -264,12 +264,12 @@ with st.sidebar:
 
         # Configurable square-card layout for A4 printing.
         card_size_cm = st.slider(
-            "Card size (cm)", min_value=3.0, max_value=8.0,
+            tr("Card size (cm)"), min_value=3.0, max_value=8.0,
             value=5.0, step=0.5, key="print_card_size_cm",
             help=tr("Square card size. The available rows and columns adapt to A4.")
         )
         card_spacing_cm = st.slider(
-            "Space between cards (cm)", min_value=0.0, max_value=1.0,
+            tr("Space between cards (cm)"), min_value=0.0, max_value=1.0,
             value=0.0, step=0.1, key="print_card_spacing_cm",
             help=tr("Adds the same gap horizontally and vertically between cards."),
             on_change=reset_generation
@@ -284,11 +284,11 @@ with st.sidebar:
             max(1, int(st.session_state.get("print_rows", 5))), max_rows
         )
         cards_per_row = st.slider(
-            "Columns per page", min_value=1, max_value=max_cols,
+            tr("Columns per page"), min_value=1, max_value=max_cols,
             key="print_cols"
         )
         cards_per_col = st.slider(
-            "Rows per page", min_value=1, max_value=max_rows,
+            tr("Rows per page"), min_value=1, max_value=max_rows,
             key="print_rows"
         )
         st.caption(
@@ -369,7 +369,7 @@ with st.sidebar:
         default_grad = DEFAULT_COLOR_GRADIENT
         st.session_state.color_gradient = dynamic_color_list(
             "gradient", 
-            "Year Color Gradient", 
+            tr("Year Color Gradient"), 
             default_grad, 
             help_text=tr("Colors map to the oldest to newest years.")
         )
@@ -493,7 +493,15 @@ with info_col:
         st.write(tr("2. Paste the playlist URL below!"))
 
 with preview_col:
-    st.info(tr("**Supported formats:**\n- Track links: `https://open.spotify.com/track/...`\n- Playlist links: `https://open.spotify.com/playlist/...`"))
+    st.info(
+        """**Formats acceptés :**
+- Liens de titres : `https://open.spotify.com/track/...`
+- Liens de playlists : `https://open.spotify.com/playlist/...`"""
+        if st.session_state.interface_language == "Français" else
+        """**Supported formats:**
+- Track links: `https://open.spotify.com/track/...`
+- Playlist links: `https://open.spotify.com/playlist/...`"""
+    )
 
 # Input Area
 st.subheader(tr("Input"))
