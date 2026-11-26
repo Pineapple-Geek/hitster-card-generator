@@ -176,25 +176,7 @@ with st.sidebar:
             spotify_client_id = st.text_input("Client ID", type="password")
             spotify_client_secret = st.text_input("Client Secret", type="password")
         
-        st.divider()
-        st.header("Feedback")
-        st.write("Found a bug or have a feature idea? Let me know on GitHub!")
-        st.link_button(
-            label="Open GitHub Issues", 
-            url="https://github.com/WhiteShunpo/hitster-cards-generator/issues",
-            type="secondary",
-        )
 
-        st.divider()
-        st.markdown("### ☕ Support the Project")
-        button_html = """
-        <a href="https://www.buymeacoffee.com/WhiteShunpo" target="_blank">
-            <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
-            alt="Buy Me A Coffee" style="height: 50px !important;width: 181px !important;" >
-        </a>
-        """
-        st.markdown(button_html, unsafe_allow_html=True)
-        
         st.session_state.ink_mode = ink_mode
         st.session_state.border_mode = border_mode
         st.session_state.google_font = google_font
