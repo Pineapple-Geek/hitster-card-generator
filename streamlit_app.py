@@ -407,6 +407,7 @@ with st.sidebar:
     st.session_state.design_settings = {
         "card_size_cm": card_size_cm,
         "card_spacing_cm": card_spacing_cm,
+        "interface_language": st.session_state.interface_language,
         "cards_per_row": cards_per_row,
         "cards_per_col": cards_per_col,
         "ink_saving_mode": ink_mode,
@@ -555,10 +556,10 @@ if st.button(tr("🔍 Fetch Song Metadata"), type="primary"):
                         st.error(tr("Could not extract tracks from the playlist page. Try adding Spotify API credentials in the sidebar, or paste individual track links instead."))
                         st.stop()
                     st.write(tr("Found {count} tracks. Scraping metadata...").format(count=len(track_links)))
-                    songs = utils.fetch_no_api_data_from_list(track_links, progress_bar)
+                    songs = utils.fetch_no_api_data_from_list(track_links, progress_bar, language=st.session_state.interface_language)
             else:
                 st.write(tr("Scraping track metadata..."))
-                songs = utils.fetch_no_api_data_from_list(input_data, progress_bar)
+                songs = utils.fetch_no_api_data_from_list(input_data, progress_bar, language=st.session_state.interface_language)
 
             status.update(label=tr("✅ Fetched {count} songs!").format(count=len(songs)), state="complete")
             progress_bar.empty()
